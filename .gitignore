@@ -3,6 +3,8 @@
 
 # Gradle local data
 .gradle/
+gradle/
+build/
 
 # Visual Studio Code local data
 .vscode/
