@@ -1,0 +1,8 @@
+# Intellij meta
+.idea/
+
+# Gradle local data
+.gradle/
+
+# Visual Studio Code local data
+.vscode/
