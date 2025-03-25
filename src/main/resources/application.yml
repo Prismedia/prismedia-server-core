@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: prismedia-server-core
+  profiles:
+    active: local # 기본적으로 local 프로필 활성화
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
+server:
+  port: 8080
+  
+logging:
+  level:
+    org.hibernate.SQL: debug
+    com.prismedia: debug
+
+# 로컬 환경 설정
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:prismediadb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# 배포 환경 설정
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/prismediadb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: prismedia
+    password: securePassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
