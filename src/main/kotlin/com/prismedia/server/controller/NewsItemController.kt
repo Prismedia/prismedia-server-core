@@ -35,7 +35,7 @@ class NewsItemController(private val newsItemService: NewsItemService) {
      * 특정 ID의 뉴스 아이템 조회
      */
     @GetMapping("/{id}")
-    fun getNewsItemById(@PathVariable id: String): ResponseEntity<NewsItemDto> {
+    fun getNewsItemById(@PathVariable id: Long): ResponseEntity<NewsItemDto> {
         val newsItem = newsItemService.getNewsItemById(id)
         return if (newsItem != null) {
             ResponseEntity.ok(newsItem)
@@ -70,7 +70,7 @@ class NewsItemController(private val newsItemService: NewsItemService) {
      */
     @PutMapping("/{id}")
     fun updateNewsItem(
-        @PathVariable id: String,
+        @PathVariable id: Long,
         @RequestBody newsItemDto: NewsItemDto
     ): ResponseEntity<NewsItemDto> {
         val updatedNewsItem = newsItemService.updateNewsItem(id, newsItemDto)
@@ -85,7 +85,7 @@ class NewsItemController(private val newsItemService: NewsItemService) {
      * 뉴스 아이템 삭제
      */
     @DeleteMapping("/{id}")
-    fun deleteNewsItem(@PathVariable id: String): ResponseEntity<Unit> {
+    fun deleteNewsItem(@PathVariable id: Long): ResponseEntity<Unit> {
         newsItemService.deleteNewsItem(id)
         return ResponseEntity.noContent().build()
     }

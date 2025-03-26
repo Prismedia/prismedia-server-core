@@ -7,8 +7,8 @@ import java.time.LocalDateTime
 @Table(name = "news_items")
 class NewsItem(
     @Id
-    @Column(length = 100)
-    val id: String,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
 
     @Column(nullable = false)
     var title: String,
@@ -27,14 +27,9 @@ class NewsItem(
 
     var category: String? = null,
 
-    @Column(name = "left_percent", nullable = false)
-    var leftPercent: Double,
-
-    @Column(name = "center_percent", nullable = false)
-    var centerPercent: Double,
-
-    @Column(name = "right_percent", nullable = false)
-    var rightPercent: Double,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "political_bias")
+    var politicalBias: PoliticalBias,
 
     @Column(name = "published_date")
     var date: LocalDateTime? = null,
@@ -44,9 +39,7 @@ class NewsItem(
 
     var source: String? = null,
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "updated_at", nullable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cluster_id")
+    var newsCluster: NewsCluster? = null
+) : BaseEntity()

@@ -1,6 +1,7 @@
 package com.prismedia.server.service
 
 import com.prismedia.server.domain.NewsItem
+import com.prismedia.server.domain.PoliticalBias
 import com.prismedia.server.dto.NewsItemDto
 import com.prismedia.server.repository.NewsItemRepository
 import org.springframework.data.domain.Page
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.util.*
 
 @Service
 class NewsItemService(private val newsItemRepository: NewsItemRepository) {
@@ -26,7 +26,7 @@ class NewsItemService(private val newsItemRepository: NewsItemRepository) {
      * 특정 ID의 뉴스 아이템 조회
      */
     @Transactional(readOnly = true)
-    fun getNewsItemById(id: String): NewsItemDto? {
+    fun getNewsItemById(id: Long): NewsItemDto? {
         return newsItemRepository.findById(id)
             .map { NewsItemDto.fromEntity(it) }
             .orElse(null)
@@ -69,16 +69,14 @@ class NewsItemService(private val newsItemRepository: NewsItemRepository) {
     fun saveNewsItem(newsItemDto: NewsItemDto): NewsItemDto {
         val newsItem = with(newsItemDto) {
             NewsItem(
-                id = id.ifEmpty { UUID.randomUUID().toString() },
+                id = 0L, // AutoIncrement ID
                 title = title,
                 preview = preview,
                 imageUrl = imageUrl,
                 sourceUrl = sourceUrl,
                 sourceName = sourceName,
                 category = category,
-                leftPercent = leftPercent,
-                centerPercent = centerPercent,
-                rightPercent = rightPercent,
+                politicalBias = politicalBias,
                 date = date?.let { parseDate(it) },
                 sourceCount = sourceCount,
                 source = source
@@ -93,7 +91,7 @@ class NewsItemService(private val newsItemRepository: NewsItemRepository) {
      * 특정 ID의 뉴스 아이템 업데이트
      */
     @Transactional
-    fun updateNewsItem(id: String, newsItemDto: NewsItemDto): NewsItemDto? {
+    fun updateNewsItem(id: Long, newsItemDto: NewsItemDto): NewsItemDto? {
         val existingNewsItem = newsItemRepository.findById(id).orElse(null) ?: return null
         
         // 업데이트 로직
@@ -104,13 +102,10 @@ class NewsItemService(private val newsItemRepository: NewsItemRepository) {
             sourceUrl = newsItemDto.sourceUrl
             sourceName = newsItemDto.sourceName
             category = newsItemDto.category
-            leftPercent = newsItemDto.leftPercent
-            centerPercent = newsItemDto.centerPercent
-            rightPercent = newsItemDto.rightPercent
+            politicalBias = newsItemDto.politicalBias
             date = newsItemDto.date?.let { parseDate(it) }
             sourceCount = newsItemDto.sourceCount
             source = newsItemDto.source
-            updatedAt = LocalDateTime.now()
         }
         
         val updatedNewsItem = newsItemRepository.save(existingNewsItem)
@@ -121,7 +116,7 @@ class NewsItemService(private val newsItemRepository: NewsItemRepository) {
      * 특정 ID의 뉴스 아이템 삭제
      */
     @Transactional
-    fun deleteNewsItem(id: String) {
+    fun deleteNewsItem(id: Long) {
         newsItemRepository.deleteById(id)
     }
     

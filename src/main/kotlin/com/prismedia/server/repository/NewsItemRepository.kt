@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface NewsItemRepository : JpaRepository<NewsItem, String> {
+interface NewsItemRepository : JpaRepository<NewsItem, Long> {
     
     /**
      * 카테고리로 뉴스 아이템 검색

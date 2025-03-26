@@ -1,26 +1,23 @@
 package com.prismedia.server.dto
 
 import com.prismedia.server.domain.NewsItem
+import com.prismedia.server.domain.PoliticalBias
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-/**
- * 프론트엔드에 전달할 뉴스 아이템 DTO 클래스
- */
 data class NewsItemDto(
-    val id: String,
+    val id: Long = 0,
     val title: String,
     val preview: String,
     val imageUrl: String? = null,
     val sourceUrl: String? = null,
     val sourceName: String? = null,
     val category: String? = null,
-    val leftPercent: Double,
-    val centerPercent: Double,
-    val rightPercent: Double,
+    val politicalBias: PoliticalBias,
     val date: String? = null,
     val sourceCount: Int? = null,
-    val source: String? = null
+    val source: String? = null,
+    val clusterId: Long? = null
 ) {
     companion object {
         /**
@@ -40,12 +37,11 @@ data class NewsItemDto(
                 sourceUrl = entity.sourceUrl,
                 sourceName = entity.sourceName,
                 category = entity.category,
-                leftPercent = entity.leftPercent,
-                centerPercent = entity.centerPercent,
-                rightPercent = entity.rightPercent,
+                politicalBias = entity.politicalBias,
                 date = dateString,
                 sourceCount = entity.sourceCount,
-                source = entity.source
+                source = entity.source,
+                clusterId = entity.newsCluster?.id
             )
         }
     }
