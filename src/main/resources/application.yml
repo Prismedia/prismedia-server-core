@@ -10,6 +10,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope: email, profile
   
 server:
   port: 8080
@@ -19,6 +28,13 @@ logging:
     org.hibernate.SQL: debug
     com.prismedia: debug
 
+# 애플리케이션 커스텀 속성
+app:
+  auth:
+    token-secret: ${JWT_SECRET}
+    token-expiration-ms: 864000000 # 10일
+    allowed-origins: http://localhost:3000,http://localhost:8080
+    
 # 로컬 환경 설정
 ---
 spring:
