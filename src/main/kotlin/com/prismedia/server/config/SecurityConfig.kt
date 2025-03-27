@@ -1,11 +1,11 @@
 package com.prismedia.server.config
 
-import com.prismedia.server.security.CustomUserDetailsService
-import com.prismedia.server.security.RestAuthenticationEntryPoint
-import com.prismedia.server.security.TokenAuthenticationFilter
-import com.prismedia.server.security.oauth2.CustomOAuth2UserService
-import com.prismedia.server.security.oauth2.OAuth2AuthenticationFailureHandler
-import com.prismedia.server.security.oauth2.OAuth2AuthenticationSuccessHandler
+import com.prismedia.server.security.userdetails.CustomUserDetailsService
+import com.prismedia.server.security.entrypoint.RestAuthenticationEntryPoint
+import com.prismedia.server.security.filter.TokenAuthenticationFilter
+import com.prismedia.server.security.oauth2.service.CustomOAuth2UserService
+import com.prismedia.server.security.oauth2.handler.OAuth2AuthenticationFailureHandler
+import com.prismedia.server.security.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -35,8 +35,8 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors{}
-            .csrf{ it.disable() }
+            .cors {}
+            .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
@@ -74,9 +74,9 @@ class SecurityConfig(
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .failureHandler(oAuth2AuthenticationFailureHandler)
             }
-            
+
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-        
+
         return http.build()
     }
 

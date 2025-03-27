@@ -36,7 +36,7 @@ class OAuth2AuthenticationSuccessHandler(
         redirectStrategy.sendRedirect(request, response, targetUrl)
     }
 
-    override protected fun determineTargetUrl(
+    override fun determineTargetUrl(
         request: HttpServletRequest,
         response: HttpServletResponse,
         authentication: Authentication

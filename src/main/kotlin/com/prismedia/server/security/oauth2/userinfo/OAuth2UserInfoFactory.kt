@@ -10,7 +10,7 @@ object OAuth2UserInfoFactory {
                 GoogleOAuth2UserInfo(attributes)
             }
             else -> {
-                throw RuntimeException("죄송합니다. $registrationId 로그인은 지원하지 않습니다.")
+                throw RuntimeException("$registrationId 로그인은 지원하지 않습니다.")
             }
         }
     }
