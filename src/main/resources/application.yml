@@ -31,9 +31,11 @@ logging:
 # 애플리케이션 커스텀 속성
 app:
   auth:
-    token-secret: ${JWT_SECRET}
+    token-secret: secret_key_must_change_in_production
     token-expiration-ms: 864000000 # 10일
     allowed-origins: http://localhost:3000,http://localhost:8080
+  oauth2:
+    authorized-redirect-uri: http://localhost:3000/oauth2/redirect
     
 # 로컬 환경 설정
 ---
@@ -44,7 +46,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:prismediadb
     username: sa
-    password: 
+    password: abcd
     driver-class-name: org.h2.Driver
   h2:
     console:
