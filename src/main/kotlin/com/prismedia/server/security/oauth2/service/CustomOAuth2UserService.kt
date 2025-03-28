@@ -49,10 +49,10 @@ class CustomOAuth2UserService(
         if (userOptional.isPresent) {
             user = userOptional.get()
             
-            if (user.provider != AuthProvider.valueOf(registrationId.uppercase())) {
+            // Google 제공자 확인 코드 (Google만 허용)
+            if (AuthProvider.valueOf(registrationId.uppercase()) != AuthProvider.GOOGLE) {
                 throw OAuth2AuthenticationProcessingException(
-                    "이미 ${user.provider} 계정으로 가입되어 있습니다. " +
-                            "${user.provider} 계정으로 로그인해 주세요."
+                    "Google 계정으로만 로그인이 가능합니다."
                 )
             }
             

@@ -1,27 +1,25 @@
 package com.prismedia.server.controller
 
-import com.prismedia.server.dto.auth.SignUpRequest
-import com.prismedia.server.dto.auth.SignUpResponse
-import com.prismedia.server.service.UserService
-import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController(private val userService: UserService) {
+class AuthController {
 
     /**
-     * 회원가입 API
-     * 새 사용자 계정을 생성합니다.
+     * 인증 정보 API
+     * 사용 가능한 인증 방법에 대한 정보를 제공합니다.
      */
-    @PostMapping("/signup")
-    fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<SignUpResponse> {
-        val signUpResponse = userService.registerUser(signUpRequest)
-        return ResponseEntity.status(HttpStatus.CREATED).body(signUpResponse)
+    @GetMapping("/info")
+    fun getAuthInfo(): ResponseEntity<Map<String, Any>> {
+        val authInfo = mapOf(
+            "message" to "Google OAuth2 로그인만 지원합니다.",
+            "loginUrl" to "/oauth2/authorize/google",
+            "callbackUrl" to "/oauth2/callback/google"
+        )
+        return ResponseEntity.ok(authInfo)
     }
 }

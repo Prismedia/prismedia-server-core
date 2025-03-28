@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/news")
-@CrossOrigin(origins = ["*"]) // TODO(전역 CORS설정 제외필요함!)
 class NewsItemController(private val newsItemService: NewsItemService) {
 
     /**
