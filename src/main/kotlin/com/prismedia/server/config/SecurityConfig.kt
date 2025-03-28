@@ -1,6 +1,5 @@
 package com.prismedia.server.config
 
-import com.prismedia.server.security.userdetails.CustomUserDetailsService
 import com.prismedia.server.security.entrypoint.RestAuthenticationEntryPoint
 import com.prismedia.server.security.filter.TokenAuthenticationFilter
 import com.prismedia.server.security.oauth2.service.CustomOAuth2UserService
