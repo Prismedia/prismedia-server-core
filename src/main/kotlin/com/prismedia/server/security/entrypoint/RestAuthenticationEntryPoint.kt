@@ -9,6 +9,11 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
 
+/**
+ * RestAuthenticationEntryPoint
+ *
+ * Auth 관련 Global Handler를 대신하는 제어 클래스
+ */
 @Component
 class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
     
