@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # 스프링 부트 애플리케이션
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prismedia-server
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/prismediadb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=prismedia
+      - SPRING_DATASOURCE_PASSWORD=securePassword
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - APP_AUTH_TOKEN_SECRET=${APP_AUTH_TOKEN_SECRET:-secret_key_must_change_in_production}
+    depends_on:
+      - db
+    networks:
+      - prismedia-network
+
+  # MySQL 데이터베이스
+  db:
+    image: mysql:8.0
+    container_name: prismedia-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=prismediadb
+      - MYSQL_USER=prismedia
+      - MYSQL_PASSWORD=securePassword
+      - MYSQL_ROOT_PASSWORD=rootPassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - prismedia-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+networks:
+  prismedia-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
