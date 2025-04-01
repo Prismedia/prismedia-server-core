@@ -8,3 +8,6 @@ build/
 
 # Visual Studio Code local data
 .vscode/
+
+# Compiled files
+bin/
