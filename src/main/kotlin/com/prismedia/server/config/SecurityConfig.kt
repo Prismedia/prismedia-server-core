@@ -82,12 +82,12 @@ class SecurityConfig(
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        // TODO(전역 CORS설정 제외필요함!)
+        // CORS 설정
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*") 
+        configuration.allowedOrigins = listOf("*")
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") 
         configuration.allowedHeaders = listOf("*") 
-        configuration.allowCredentials = false 
+        configuration.allowCredentials = true 
         configuration.maxAge = 3600L 
 
         val source = UrlBasedCorsConfigurationSource()

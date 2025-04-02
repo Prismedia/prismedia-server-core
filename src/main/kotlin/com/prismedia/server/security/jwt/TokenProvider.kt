@@ -13,6 +13,8 @@ import java.security.Key
 import java.util.*
 import javax.crypto.SecretKey
 import com.prismedia.server.security.userdetails.UserPrincipal
+import com.prismedia.server.repository.RefreshTokenRepository
+import com.prismedia.server.domain.token.RefreshToken
 
 @Component
 class TokenProvider {
