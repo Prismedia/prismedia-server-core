@@ -54,7 +54,8 @@ class SecurityConfig(
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/auth/**",
+                        "/api/auth/**",
+                        "/api/news/**",
                         "/oauth2/**",
                         "/actuator/**"
                     ).permitAll()
@@ -66,7 +67,7 @@ class SecurityConfig(
                         it.baseUri("/oauth2/authorize")
                     }
                     .redirectionEndpoint {
-                        it.baseUri("/oauth2/callback/*")
+                        it.baseUri("/oauth2/redirect")
                     }
                     .userInfoEndpoint {
                         it.userService(customOAuth2UserService)
@@ -84,7 +85,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         // CORS 설정
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
+        configuration.allowedOrigins = listOf("http://localhost:3000") 
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") 
         configuration.allowedHeaders = listOf("*") 
         configuration.allowCredentials = true 
