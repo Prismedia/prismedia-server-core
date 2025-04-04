@@ -1,11 +1,16 @@
 package com.prismedia.server.controller
 
+import com.prismedia.server.domain.user.User
+import com.prismedia.server.repository.UserRepository
 import com.prismedia.server.security.jwt.TokenProvider
+import com.prismedia.server.security.userdetails.UserPrincipal
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,7 +20,8 @@ import org.springframework.beans.factory.annotation.Value
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    private val tokenProvider: TokenProvider
+    private val tokenProvider: TokenProvider,
+    private val userRepository: UserRepository
 ) {
     @Value("\${app.auth.token-expiration-ms}")
     private var tokenExpirationMs: Long = 0
@@ -32,6 +38,32 @@ class AuthController(
             "callbackUrl" to "/oauth2/callback/google"
         )
         return ResponseEntity.ok(authInfo)
+    }
+    
+    /**
+     * 현재 로그인한 사용자 정보 API
+     * 현재 인증된 사용자의 정보를 반환합니다.
+     */
+    @GetMapping("/me")
+    fun getCurrentUser(@AuthenticationPrincipal userPrincipal: UserPrincipal?): ResponseEntity<Any> {
+        if (userPrincipal == null) {
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(mapOf("error" to "인증되지 않은 사용자입니다."))
+        }
+        
+        val user = userRepository.findById(userPrincipal.id)
+            .orElseThrow { RuntimeException("사용자를 찾을 수 없습니다: ${userPrincipal.id}") }
+        
+        val userInfo = mapOf(
+            "id" to user.id,
+            "name" to user.name,
+            "email" to user.email,
+            "imageUrl" to user.imageUrl,
+            "role" to user.role.name
+        )
+        
+        return ResponseEntity.ok(userInfo)
     }
     
     /**
