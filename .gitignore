@@ -6,9 +6,6 @@
 gradle/
 build/
 
-# OAuth2 Secret
-.env
-
 # Visual Studio Code local data
 .vscode/
 
