@@ -5,6 +5,8 @@ import com.prismedia.server.security.filter.TokenAuthenticationFilter
 import com.prismedia.server.security.oauth2.service.CustomOAuth2UserService
 import com.prismedia.server.security.oauth2.handler.OAuth2AuthenticationFailureHandler
 import com.prismedia.server.security.oauth2.handler.OAuth2AuthenticationSuccessHandler
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -31,6 +33,8 @@ class SecurityConfig(
     private val tokenAuthenticationFilter: TokenAuthenticationFilter,
     private val restAuthenticationEntryPoint: RestAuthenticationEntryPoint
 ) {
+
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -87,12 +91,16 @@ class SecurityConfig(
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = listOf("http://localhost:3000") 
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") 
-        configuration.allowedHeaders = listOf("*") 
+        configuration.allowedHeaders = listOf("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers") 
+        configuration.exposedHeaders = listOf("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
         configuration.allowCredentials = true 
         configuration.maxAge = 3600L 
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration) 
+        
+        logger.debug("CORS 설정 완료: allowCredentials=${configuration.allowCredentials}, allowedOrigins=${configuration.allowedOrigins}")
+        
         return source
     }
     

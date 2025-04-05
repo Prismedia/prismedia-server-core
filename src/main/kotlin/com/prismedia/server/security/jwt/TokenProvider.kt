@@ -133,10 +133,12 @@ class TokenProvider {
     // JWT 토큰 유효성 검증
     fun validateToken(authToken: String): Boolean {
         try {
+            logger.debug("토큰 검증 시작: ${authToken.take(10)}...")
             Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(authToken)
+            logger.debug("토큰 검증 성공")
             return true
         } catch (ex: SecurityException) {
             logger.error("유효하지 않은 JWT 서명입니다.")
